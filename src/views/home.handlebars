@@ -1,0 +1,23 @@
+<section>
+    <h1 class="text-center py-5">Todos los productos</h1>
+    <div class="container">
+        <div class="row justify-content-around">
+            {{#each docs}}
+            <div class="col-4 my-3" >
+                <div class="card " style="height: 500px">
+                    <img src={{this.thumbnail}} class="card-img-top" alt={{this.title}} style="height: 350px">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fs-4">{{this.title}}</h5>
+                        <p class="card-text fs-6 fw-bold">Precio:${{this.price}}</p>
+                        <div class="d-flex justify-content-center">
+                            <a href="#" productId={{this._id}} class="btn btn-primary" id="addToCart">Añadir al carrito</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</section>
+<script src="/socket.io/socket.io.js"></script>
+<script src="../public/scripts/socketClient.js"></script>

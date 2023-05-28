@@ -1,0 +1,75 @@
+[
+    {
+        "pid": 1,
+        "title": "Adidas Duramo 2.0",
+        "description":"La correcta amortiguación, su suela flexible, el agarre perfecto y su peso ligero hacen que te olvides de las lesiones a la hora de salir a correr.",
+        "price":70,
+        "category":"SNEAKER",
+        "status": true,
+        "thumbnail":"https://http2.mlstatic.com/D_NQ_NP_654488-MLA51457648644_092022-O.webp", 
+        "code":"AKJ2K1",
+        "stock":10
+    },
+    {
+        "pid":2,
+        "title": "Adidas Galaxy 6",
+        "description":"La correcta amortiguación, su suela flexible, el agarre perfecto y su peso ligero hacen que te olvides de las lesiones a la hora de salir a correr.",
+        "price":60,
+        "category":"SNEAKER",
+        "status": true,
+        "thumbnail":"https://http2.mlstatic.com/D_NQ_NP_917998-MLA51734013612_092022-O.webp", 
+        "code":"AD6FSG",
+        "stock":16
+    },
+    {
+        "pid":3,
+        "title": "Adidas Response",
+        "description":"La correcta amortiguación, su suela flexible, el agarre perfecto y su peso ligero hacen que te olvides de las lesiones a la hora de salir a correr.",
+        "price":50,
+        "category":"SNEAKER",
+        "status": true,
+        "thumbnail":"https://http2.mlstatic.com/D_NQ_NP_932744-MLA51192929867_082022-O.webp", 
+        "code":"AXCB55",
+        "stock":9
+    },{
+        "pid":4,
+        "title": "T-shirt Adidas Essential",
+        "description":"Esta remera adidas para jóvenes deportistas está confeccionada en un tejido de algodón suave que ofrece una gran comodidad y ligereza.",
+        "price":20,
+        "category":"SPORTSWEAR",
+        "status": true,
+        "thumbnail":"https://http2.mlstatic.com/D_NQ_NP_750249-MLA54365681388_032023-O.webp", 
+        "code":"64QWER",
+        "stock":20
+    },{
+        "pid":5,
+        "title": "Trousers Adidas Essentials",
+        "description":"La correcta amortiguación, su suela flexible, el agarre perfecto y su peso ligero hacen que te olvides de las lesiones a la hora de salir a correr.",
+        "price":30,
+        "category":"SPORTSWEAR",
+        "status": true,
+        "thumbnail":"https://http2.mlstatic.com/D_NQ_NP_661312-MLA69191493901_052023-O.webp", 
+        "code":"K56FHA",
+        "stock":9
+    },{
+        "pid":6,
+        "title": "Wind break jacket Essentials",
+        "description":"Su diseño liviano con forro interno de malla permite la circulación del aire mientras la capucha te protege de la lluvia.",
+        "price":45,
+        "category":"SPORTSWEAR",
+        "status": true,
+        "thumbnail":"https://http2.mlstatic.com/D_NQ_NP_689785-MLA54364061999_032023-O.webp", 
+        "code":"Y65YRT",
+        "stock":11
+    },{
+        "pid":7,
+        "title": "Organization bag essentials",
+        "description":"Presenta un compartimento principal con cremalleras para guardar las llaves, las tarjetas y el móvil de forma segura",
+        "price":15,
+        "category":"ACCESORIES",
+        "status": true,
+        "thumbnail":"https://http2.mlstatic.com/D_NQ_NP_757165-MLA54588607340_032023-O.webp", 
+        "code":"U6Y4RT",
+        "stock":13
+    }
+]
