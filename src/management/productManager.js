@@ -85,11 +85,7 @@ class ProductManager {
     }
     getProductsById = async(pid) => {
         try {
-            const product= await productsModel.paginate({_id: pid},{
-             limit:1,
-             page:1,
-             lean:true
-            })
+            const product= await productsModel.findOne({_id:pid}).lean().exec()
             return (product)
         } catch (error) {
             console.log(error)

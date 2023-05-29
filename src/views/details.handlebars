@@ -1,0 +1,24 @@
+<script>
+    function addProduct(cid, pid){
+        fetch(`http://localhost:8080/api/carts/${cid}/products/${product._id}`),{
+            method: "POST"
+        }
+    }
+</script>
+
+<div class="card d-flex justify-content-center my-3 mx-5" style="width: 75%;">
+    <div class="row bg-light">
+        <div class="col-md-4">
+            <img src='{{product.thumbnail}}' class="img-fluid rounded-start" alt="{{product.title}}">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body text-center">
+                <h3 class="card-title mb-5">{{product.title}}</h5>
+                    <p class="card-text fs-4 text-start">{{product.description}}</p>
+                    <p class="card-text my-3 fs-3 text-start">Price: usd {{product.price}}</p>
+                    <a href="/api/products" class="btn btn-primary mt-3 py-2 mx-5">Home</a>
+                    <button class="btn btn-primary mt-3 py-2 mx-5" onclick="addProduct('{{cid}}', '{{product._id}}')">Add to cart</button>
+            </div>
+        </div>
+    </div>
+</div>

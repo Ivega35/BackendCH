@@ -19,8 +19,8 @@ router.get('/', async(req, res)=>{
 //GET /api/products/:pid --> Get a product in particular (pid)
 router.get('/:pid', async(req, res)=>{
     const pid= req.params.pid
-    const identified= await pm.getProductsById(pid)
-    res.render('home', identified)
+    const product= await pm.getProductsById(pid)
+    res.render('details', {product})
 })
 //POST /api/products --> To create any product by body(ThunderClient)
 router.post ('/', async(req, res)=>{
