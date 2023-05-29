@@ -17,11 +17,11 @@ router.get('/:cid', async(req,res)=>{
     
 })
 //POST /api/carts/:cid/products/:pid --> To add a product(pid) to a specific cart(cid)
-router.post('/:cid/products/:pid', (req, res)=>{
+router.post('/:cid/products/:pid', async(req, res)=>{
     const cid= req.params.cid 
     const pid= req.params.pid
-    cm.addProductToCart(cid, pid)
-    res.status(201).send(`producto ${pid} añadido al carrito ${cid}`)
+    const result= await cm.addProductToCart(cid, pid)
+    res.status(201).send(result)
 
 })
 //PUT /api/carts/:cid --> Update the whole products array

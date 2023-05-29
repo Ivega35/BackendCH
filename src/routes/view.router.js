@@ -9,8 +9,11 @@ const cm= new cartManager()
 const hbs= handlebars.create({})
 
 router.get('/products', async(req, res)=>{
-    const pList = await pm.getProductsPaginated(100)
-    res.render('home', pList)
+    const result = await pm.getProductsPaginated(100)
+    result.prevLink = result.hasPrevPage ? `/?page=${result.prevPage}` : ''
+    result.nextLink = result.hasNextPage ? `/?page=${result.nextPage}` : ''
+    res.render('home', result)
+
 })
 router.get('/cart/:cid', async(req, res)=>{
     const cid= req.params.cid
