@@ -4,22 +4,14 @@ import ProductManager from "../management/productManager.js";
 const router = Router()
 const pm = new ProductManager()
 
-//GET api/products --> Get all products.Can filter by category and sort by price.
+//GET api/products --> Get all products.
 router.get('/', async(req, res)=>{
-    //params
-    let limit= req.query.limit
-    if(!limit)limit=10
-    let page= req.query.page
-    if(!page)page=1
-    const category= req.query.category
-    const sort= req.query.sort
-    //functions
-    const result= await pm.getProductsPaginated(limit, page, category, sort)
-    console.log(result)
-    result.prevLink = result.hasPrevPage ? `/api/products/?limit=${limit}&page=${result.prevPage}` : ''
-    result.nextLink = result.hasNextPage ? `/api/products/?limit=${limit}&page=${result.nextPage}` : ''
-    res.render('home', result)
+    const result = await pm.getProductsPaginated(100)
+    result.prevLink = result.hasPrevPage ? `/?page=${result.prevPage}` : ''
+    result.nextLink = result.hasNextPage ? `/?page=${result.nextPage}` : ''
+    res.render('home', {result})
 })
+
 //GET /api/products/:pid --> Get a product in particular (pid)
 router.get('/:pid', async(req, res)=>{
     const pid= req.params.pid

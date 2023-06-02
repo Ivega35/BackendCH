@@ -1,11 +1,13 @@
 import express from 'express'
 import handlebars from 'express-handlebars'
 import mongoose from 'mongoose'
+import session from 'express-session'
+import MongoStore from 'connect-mongo'
 
 import productsRouter from './routes/products.router.js'
 import CartsRouter from './routes/carts.router.js'
 import viewsRouter from './routes/view.router.js'
-
+import sessionsRouter from './routes/sessions.router.js'
 mongoose.set("strictQuery", false)
 
 const app= express()
@@ -22,11 +24,22 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', './src/views')
 app.set('view engine', 'handlebars')
 
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: uri,
+        dbName: 'E-comDB'
+    }),
+    secret: 'adminCod3r123',
+    resave: true,
+    saveUninitialized: true
+}))
 //Routers
 app.use('/api/products', productsRouter)
 app.use('/api/carts', CartsRouter)
-app.use('/', viewsRouter)
-//Mongoose, server & socket
+
+app.use('/products', viewsRouter)
+app.use('/session', sessionsRouter)
+//Mongoose and server
 try {
     await mongoose.connect(uri)
     console.log('DBs connected!')

@@ -1,14 +1,18 @@
 <section>
-    <h1 class="text-center py-5">Todos los productos</h1>
+    {{#if user}}
+    <h1 class="text-center py-5">Hi, {{user.first_name}}. Welcome to Adidas store</h1>
+    {{else}}
+    <h1 class="text-center py-5">Welcome to Adidas store</h1>
+    {{/if}}
     <div class="container">
         <div class="row justify-content-around">
-            {{#each docs}}
+            {{#each result.docs}}
             <div class="col-4 my-3">
                 <div class="card " style="height: 500px">
                     <img src={{this.thumbnail}} class="card-img-top" alt={{this.title}} style="height: 350px">
                     <div class="card-body text-center">
                         <h5 class="card-title fs-4">{{this.title}}</h5>
-                        <p class="card-text fs-6 fw-bold">Precio:${{this.price}}</p>
+                        <p class="card-text fs-6 fw-bold">price:${{this.price}}</p>
                         <div class="d-flex justify-content-center">
                             <a href="/api/products/{{this._id}}" class="btn btn-primary">Details</a>
                         </div>
@@ -18,14 +22,14 @@
             {{/each}}
         </div>
         <div class="row d-flex justify-content-around">
-            {{#if hasPrevPage}}
-            <a class="btn btn-primary" style="width: 150px;" href="{{prevLink}}">Previous page</a>
+            {{#if result.hasPrevPage}}
+            <a class="btn btn-primary" style="width: 150px;" href="{{result.prevLink}}">Previous page</a>
             {{else}}
             <button style="width: 150px;" class="btn btn-outline-primary" disabled>Previous page</button>
             {{/if}}
 
-            {{#if hasNextPage}}
-            <a style="width: 150px;" class="btn btn-primary" href="{{nextLink}}">Next page</a>
+            {{#if result.hasNextPage}}
+            <a style="width: 150px;" class="btn btn-primary" href="{{result.nextLink}}">Next page</a>
             {{else}}
             <button style="width: 150px;" type="button" class="btn btn-outline-primary" disabled>Next page</button>
             {{/if}}
@@ -33,5 +37,3 @@
     </div>
 
 </section>
-<script src="/socket.io/socket.io.js"></script>
-<script src="../public/scripts/socketClient.js"></script>
