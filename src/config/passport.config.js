@@ -1,11 +1,14 @@
 import passport from "passport";
 import local from 'passport-local'
 import userModel from "../models/users.model.js";
-import { createHash, isValidPassword } from "../utils.js";
+import cartManager from "../management/cartManager.js";
+import { createHash, generateToken, extractCookie, JWT_PRIVATE_KEY } from "../utils.js";
 import githubStrategy from 'passport-github2'
+import passport_jwt, { ExtractJwt } from 'passport-jwt'
 
 const LocalStrategy= local.Strategy
-
+const JWTStrategy= passport_jwt.Strategy
+const cm= new cartManager()
 const initializePassport=()=>{
     //register
     passport.use('register', new LocalStrategy({
@@ -19,9 +22,11 @@ const initializePassport=()=>{
                 console.log('User already exists')
                 return done(null, false)
             }
+            const cart= await cm.createCart()
             const newUser={
                 first_name, last_name, age, email,
-                password: createHash(password)
+                password: createHash(password),
+                cart: cart._id
             }
             if(email== 'adminCoder@coder.com'){
                 newUser.rol= 'admin'  
@@ -44,7 +49,8 @@ const initializePassport=()=>{
                 console.log('User doesnt exist')
                 return done(null, user)
             }
-            if(!isValidPassword(user,password)) return done(null, false)
+            const token= generateToken(user)
+            user.token= token
             return done(null, user)
         } catch (error) {
             return done('error')
@@ -69,6 +75,13 @@ const initializePassport=()=>{
         }
     }
     ))
+    //jwt
+    passport.use('jwt', new JWTStrategy({
+        jwtFromRequest: ExtractJwt.fromExtractors([extractCookie]),
+        secretOrKey: JWT_PRIVATE_KEY 
+    }, async(jwt_payload, done)=>{
+        done(null, jwt_payload)
+    }))
     //user des/serialize
     passport.serializeUser((user, done)=>{
         done(null, user._id)

@@ -1,8 +1,10 @@
 import { Router } from "express";
 import cartManager from "../management/cartManager.js";
+import handlebars from 'express-handlebars'
 
 const router= Router()
 const cm= new cartManager()
+const hbs= handlebars.create({})
 
 //POST /api/carts --> create cart by thc
 router.post('/', (req, res)=>{
@@ -12,9 +14,14 @@ router.post('/', (req, res)=>{
 //GET /api/carts/:cid ---> Show the products which are in cid cart
 router.get('/:cid', async(req,res)=>{
     const cid= req.params.cid
-    const list = await cm.getProductsFromACart(cid)
-    res.send(list)
-    
+    const cartSelected= await cm.getProductsFromACart(cid) 
+    hbs.handlebars.registerHelper('subtotal', function(){
+        return this.qty*this.pid.price
+    })
+    res.render('cart', {
+        cartSelected,
+        cid
+    })
 })
 //POST /api/carts/:cid/products/:pid --> To add a product(pid) to a specific cart(cid)
 router.post('/:cid/products/:pid', async(req, res)=>{

@@ -1,4 +1,5 @@
 <section>
+    {{#if products}}
     <h1 class="text-center py-5">Todos los productos</h1>
     <div class="container">
         <div class="column card p-1">
@@ -26,5 +27,10 @@
             </div>
             {{/each}}
         </div>
+    </div>
+    {{else}}
+    <div class="py-5 text-center">
+        <h3>Cart Empty</h3>
+        <a class="fs-5" href="/products">Home</a>
     </div>
 </section>

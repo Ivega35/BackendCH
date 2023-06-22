@@ -10,6 +10,8 @@ import viewsRouter from './routes/view.router.js'
 import sessionsRouter from './routes/sessions.router.js'
 import passport from 'passport'
 import initializePassport from './config/passport.config.js'
+import cookieParser from 'cookie-parser'
+import { passportCall } from './utils.js'
 
 mongoose.set("strictQuery", false)
 
@@ -21,6 +23,7 @@ const uri="mongodb+srv://ivega98:teamrocket@cluster0.vhbmpwg.mongodb.net/E-comDB
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 //app.use(express.static('./src/public'))
+app.use(cookieParser())
 
 //handlebars setup
 app.engine('handlebars', handlebars.engine())
@@ -28,10 +31,6 @@ app.set('views', './src/views')
 app.set('view engine', 'handlebars')
 
 app.use(session({
-    store: MongoStore.create({
-        mongoUrl: uri,
-        dbName: 'E-comDB'
-    }),
     secret: 'adminCod3r123',
     resave: true,
     saveUninitialized: true
@@ -45,7 +44,7 @@ app.use(passport.session())
 app.use('/api/products', productsRouter)
 app.use('/api/carts', CartsRouter)
 
-app.use('/products', viewsRouter)
+app.use('/products', passportCall('jwt'), viewsRouter)
 app.use('/session', sessionsRouter)
 //Mongoose and server
 try {

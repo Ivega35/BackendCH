@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
             type: String,
             enum:['user','admin']
         },
-    password: String
+    password: String,
+    cart: String
 })
 
 mongoose.set('strictQuery', false)

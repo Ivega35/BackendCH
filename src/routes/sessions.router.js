@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-
+import { JWT_COOKIE_NAME } from "../utils.js";
 const router= Router()
 // GET /session/register --> Shows the register form
 router.get('/register',(req, res)=>{
@@ -28,13 +28,8 @@ router.post('/login',
     if(!req.user){
         return res.status(400).send({status: 'error', error: 'invalid credentials'})
     }
-    req.session.user={
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        email: req.user.email,
-        age: req.user.age
-    }
-    res.redirect('/products')
+   
+    res.cookie(JWT_COOKIE_NAME, req.user.token).redirect('/products')
 })
 //GET /session/failLogin --> Shows an error in the login process
 router.get('/failLogin', (req,res)=>{
@@ -51,12 +46,6 @@ router.get('/githubcallback',
     })
 //GET /session/logout --> Destroys the session
 router.get('/logout', (req, res)=>{
-    req.session.destroy(err=>{
-        if(err){
-            res.status(500).render('errors/base',{error: err})
-        }else{
-            res.redirect('/session/login')
-        }
-    })
+    res.clearCookie(JWT_COOKIE_NAME).redirect('/session/login')
 })
 export default router
