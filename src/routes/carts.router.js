@@ -18,10 +18,7 @@ router.get('/:cid', async(req,res)=>{
     hbs.handlebars.registerHelper('subtotal', function(){
         return this.qty*this.pid.price
     })
-    res.render('cart', {
-        cartSelected,
-        cid
-    })
+    res.render('cart', {cartSelected})
 })
 //POST /api/carts/:cid/products/:pid --> To add a product(pid) to a specific cart(cid)
 router.post('/:cid/products/:pid', async(req, res)=>{
