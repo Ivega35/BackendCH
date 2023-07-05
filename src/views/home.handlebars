@@ -1,39 +1,37 @@
 <section>
     {{#if user}}
-    <h1 class="text-center py-5">Hi, {{user.first_name}}. Welcome to Adidas store</h1>
+    <p class="text-center fs-2 py-3">Hi, {{user.first_name}}. Welcome to Adidas store</p>
     {{else}}
     <h1 class="text-center py-5">Welcome to Adidas store</h1>
     {{/if}}
     <div class="container">
+    <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-between">
+                <li class="page-item">
+                    <a class="page-link text-dark" href="{{result.prevLink}}">Previous</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-dark" href="{{result.nextLink}}">Next</a>
+                </li>
+            </ul>
+        </nav>
         <div class="row justify-content-around">
             {{#each result.docs}}
-            <div class="col-4 my-3">
-                <div class="card " style="height: 500px">
-                    <img src={{this.thumbnail}} class="card-img-top" alt={{this.title}} style="height: 350px">
-                    <div class="card-body text-center">
-                        <h5 class="card-title fs-4">{{this.title}}</h5>
-                        <p class="card-text fs-6 fw-bold">price:${{this.price}}</p>
-                        <div class="d-flex justify-content-center">
-                            <a href="/api/products/{{this._id}}" class="btn btn-primary">Details</a>
+            <div class="col-4 my-1">
+                <div class="card" style="height: 400px; width:340px;">
+                    <a href="/api/products/{{this._id}}" style="text-decoration: none;">
+                        <img src={{this.thumbnail}} class="card-img-top" alt={{this.title}}
+                            style="height: 280px; width: 340px;">
+                        <div class="card-body mx-3">
+                            <p class="card-text fs-6 fw-bold text-dark">{{this.title}}</p>
+                            <p class="card-text fw-semibold fs-6 text-dark">price: ${{this.price}}</p>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
             {{/each}}
         </div>
-        <div class="row d-flex justify-content-around">
-            {{#if result.hasPrevPage}}
-            <a class="btn btn-primary" style="width: 150px;" href="{{result.prevLink}}">Previous page</a>
-            {{else}}
-            <button style="width: 150px;" class="btn btn-outline-primary" disabled>Previous page</button>
-            {{/if}}
-
-            {{#if result.hasNextPage}}
-            <a style="width: 150px;" class="btn btn-primary" href="{{result.nextLink}}">Next page</a>
-            {{else}}
-            <button style="width: 150px;" type="button" class="btn btn-outline-primary" disabled>Next page</button>
-            {{/if}}
-        </div>
+        
     </div>
 
 </section>

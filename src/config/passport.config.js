@@ -1,10 +1,11 @@
 import passport from "passport";
 import local from 'passport-local'
-import userModel from "../models/users.model.js";
-import cartManager from "../management/cartManager.js";
-import { createHash, generateToken, extractCookie, JWT_PRIVATE_KEY } from "../utils.js";
+import userModel from "../dao/models/users.model.js";
+import cartManager from "../dao/management/cartManager.js";
+import { createHash, generateToken, extractCookie} from "../utils.js";
 import githubStrategy from 'passport-github2'
 import passport_jwt, { ExtractJwt } from 'passport-jwt'
+import env from './environment.config.js'
 
 const LocalStrategy= local.Strategy
 const JWTStrategy= passport_jwt.Strategy
@@ -26,13 +27,13 @@ const initializePassport=()=>{
             const newUser={
                 first_name, last_name, age, email,
                 password: createHash(password),
-                cart: cart._id
             }
             if(email== 'adminCoder@coder.com'){
                 newUser.rol= 'admin'  
             }else{
                 newUser.rol='user'
             } 
+            newUser.cart= cart._id
             const result = await userModel.create(newUser)
             return done(null, result)
         } catch (error) {
@@ -58,9 +59,9 @@ const initializePassport=()=>{
     }))
     //github login
     passport.use('github', new githubStrategy({
-        clientID:'Iv1.78851299d95c033d' ,
-        clientSecret:'29b50b9539d7c856e16da336ea189328dd2fe9d9' ,
-        callbackURL:'http://localhost:8080/session/githubcallback'
+        clientID: env.clientID ,
+        clientSecret: env.clientSecret ,
+        callbackURL: env.callbackURL
     }, async(accessToken, refreshToken, profile, done)=>{
         try {
             const user= await userModel.findOne({email: profile._json.email})
@@ -78,7 +79,7 @@ const initializePassport=()=>{
     //jwt
     passport.use('jwt', new JWTStrategy({
         jwtFromRequest: ExtractJwt.fromExtractors([extractCookie]),
-        secretOrKey: JWT_PRIVATE_KEY 
+        secretOrKey: env.jwt_private_key
     }, async(jwt_payload, done)=>{
         done(null, jwt_payload)
     }))

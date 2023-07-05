@@ -1,5 +1,5 @@
 import { Router } from "express";
-import cartManager from "../management/cartManager.js";
+import cartManager from "../dao/management/cartManager.js";
 import handlebars from 'express-handlebars'
 
 const router= Router()
@@ -24,9 +24,8 @@ router.get('/:cid', async(req,res)=>{
 router.post('/:cid/products/:pid', async(req, res)=>{
     const cid= req.params.cid 
     const pid= req.params.pid
-    const result= await cm.addProductToCart(cid, pid)
-    res.status(201).send(result)
-
+    await cm.addProductToCart(cid, pid)
+    res.status(201)
 })
 //PUT /api/carts/:cid --> Update the whole products array
 router.put('/:cid', async(req, res) =>{

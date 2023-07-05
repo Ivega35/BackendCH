@@ -1,22 +1,16 @@
 import { Router } from "express";
-import ProductManager from "../management/productManager.js";
+import ProductManager from "../dao/management/productManager.js";
+
 
 const router = Router()
 const pm = new ProductManager()
-
-//GET api/products --> Get all products.
-router.get('/', async(req, res)=>{
-    const result = await pm.getProductsPaginated(100)
-    result.prevLink = result.hasPrevPage ? `/?page=${result.prevPage}` : ''
-    result.nextLink = result.hasNextPage ? `/?page=${result.nextPage}` : ''
-    res.render('home', {result})
-})
 
 //GET /api/products/:pid --> Get a product in particular (pid)
 router.get('/:pid', async(req, res)=>{
     const pid= req.params.pid
     const product= await pm.getProductsById(pid)
-    res.render('details', {product})
+    const user= req.user
+    res.render('details', {product, user})
 })
 //POST /api/products --> To create any product by body(ThunderClient)
 router.post ('/', async(req, res)=>{

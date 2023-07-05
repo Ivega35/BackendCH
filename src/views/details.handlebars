@@ -1,10 +1,3 @@
-<script>
-    function addProduct(cid, pid){
-        fetch(`http://localhost:8080/api/carts/${cid}/products/${product._id}`),{
-            method: "POST"
-        }
-    }
-</script>
 
 <div class="card d-flex justify-content-center my-3 mx-5" style="width: 75%;">
     <div class="row bg-light">
@@ -14,11 +7,29 @@
         <div class="col-md-8">
             <div class="card-body text-center">
                 <h3 class="card-title mb-5">{{product.title}}</h5>
-                    <p class="card-text fs-4 text-start">{{product.description}}</p>
-                    <p class="card-text my-3 fs-3 text-start">Price: usd {{product.price}}</p>
-                    <a href="/api/products" class="btn btn-primary mt-3 py-2 mx-5">Home</a>
-                    <button class="btn btn-primary mt-3 py-2 mx-5" onclick="addProduct({{cid}}, {{product._id}})">Add to cart</button>
+                    <p class="card-text fs-6 text-start">{{product.description}}</p>
+                    <p class="card-text fw-semibold my-3 fs-4">USD {{product.price}}</p>
+                    <a href="/api/products" class="btn btn-secondary">Home</a>
+                    <a class="btn btn-secondary" id="addToCart">Add to cart</a>
+                    
             </div>
         </div>
     </div>
 </div>
+<p>{{user.cart}}-{{product._id}}</p>
+<script>
+    const btnAdd = document.getElementById("addToCart")
+
+    btnAdd.addEventListener("click", async function(e){
+        e.preventDefault()
+        const response = await fetch("localhost:8080/api/carts/products/{{product._id}}", {
+            method: "POST"
+        })
+    })
+    const data = await response.json()
+    if(data.status == 200){
+        alert("se agrego correctamente el producto")
+    } else {
+        alert("Error no se pudo agregar el producto")
+    }
+</script>
