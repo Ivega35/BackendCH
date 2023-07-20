@@ -1,10 +1,10 @@
-import cartsModel from "../models/carts.model.js"
+import {cartService} from '../services/index.js'
 
-class cartManager{
+class CartManager{
     
-    getCartsList= async()=>{
-        const cartsList= await cartsModel.find({}).lean().exec()
-        return(cartsList)
+    getCarts= async()=>{
+        const carts= await cartService.get()
+        return(carts)
     }
     generateId= async()=>{
         let list= await this.getCartsList()
@@ -13,28 +13,23 @@ class cartManager{
     }
     createCart = async() =>{
         const newCart= {products:[]}
-        const cartGenerated= new cartsModel(newCart)
-        await cartGenerated.save()
-        return cartGenerated
+        const result= await cartService.save(newCart)
+        return result
     }
     getProductsFromACart= async(cid)=>{
-        const cartToShow = await cartsModel.findOne({_id: cid}).populate('products.pid').lean().exec()
-        return(cartToShow)  
+        const cartToShow = await cartService.getById(cid).populate('products.pid').lean().exec()
+        return(cartToShow)
     }
     getCartById=async(cid)=>{
         try {
-            const cart= await cartsModel.paginate({_id: cid},{
-                limit:1,
-                page:1,
-                lean:true
-               })
+            const cart= await cartService.getById(cid)
             return (cart)
         } catch (error) {
             console.log(error)
         }
     }
     addProductToCart= async(cid, pid)=>{
-        const cartSelected= await cartsModel.findOne({_id: cid})
+        const cartSelected= await cartService.getById(cid)
         const repeat= cartSelected.products.find(x => x.pid == pid)
         if(repeat != undefined){
             repeat.qty++
@@ -44,17 +39,17 @@ class cartManager{
                 qty: 1            
             })
         }
-        const result= await cartsModel.updateOne({_id:cid}, cartSelected)
+        const result= await cartService.update(cartSelected, cid)
         console.log(result)
         console.log(`Product ${pid} added to cart ${cid}`)
 
     }
     deleteOneCart= async(cid)=>{
-        const deleted= await cartsModel.deleteOne({_id:cid})
-        console.log(deleted)
+        const toDelete= await cartService.delete(cid)
+        console.log(toDelete)
     }
     deleteOneProductFromACart= async(cid, pid)=>{
-        const cartSelected= await cartsModel.findOne({_id: cid})
+        const cartSelected= await cartService.getById(cid)
         const productToDelete= cartSelected.products.find(x => x.pid == pid)
         const idx= cartSelected.products.findIndex(x => x.pid == pid)
         if(productToDelete.qty > 1){
@@ -62,19 +57,19 @@ class cartManager{
         }else{
             cartSelected.products.splice(idx, 1)
         }
-        const result= await cartsModel.updateOne({_id:cid}, cartSelected)
+        const result= await cartService.update( cid, cartSelected)
         console.log(`Product ${pid} eliminated from cart${cid}`)
         console.log(result)
     }
     updateCart= async(cid, newData)=>{
-        const cartToUpdate= await cartsModel.findOne({_id:cid})
+        const cartToUpdate= await cartService.getById(cid)
         cartToUpdate.products=[]
         cartToUpdate.products.push(newData)
-        const result= await cartsModel.updateOne({_id:cid}, cartToUpdate)
+        const result= await cartService.update(cid, cartToUpdate)
         console.log(result)
     }
     updateProductQty= async(cid, pid, newQty)=>{
-        const cartToUpdate= await cartsModel.findOne({_id:cid})
+        const cartToUpdate= await cartService.getById(cid)
         //delete the old product
         const productIdx = cartToUpdate.products.findIndex(x => x.pid == pid)
         cartToUpdate.products.splice(productIdx, 1)
@@ -83,12 +78,9 @@ class cartManager{
             pid: pid,
             qty: newQty
         })
-        const result= await cartsModel.updateOne({_id:cid}, cartToUpdate)
+        const result= await cartService.update(cid, cartToUpdate)
         console.log(result)
     }
 }
 
-
-
-
-export default cartManager
+export default CartManager

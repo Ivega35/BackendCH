@@ -1,26 +1,26 @@
-import mongoose from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2"
+import mongoose from "mongoose"
+export default class CartModel {
 
-const cartCollection= "carts"
-
-const cartsSchema= new mongoose.Schema({
-    products: {
-        type: [
-            {
-                pid: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref:"products"
-                },
-                qty: {
-                    type: Number,
-                    default:1
-                }
-            }
-        ]
+    static get model() {
+        return 'carts'
     }
-})
 
-cartsSchema.plugin(mongoosePaginate)
-const cartsModel= mongoose.model(cartCollection, cartsSchema)
-
-export default cartsModel
+    static get schema() {
+        return {
+            products: {
+                type: [
+                    {
+                        pid: {
+                            type: mongoose.Schema.Types.ObjectId,
+                            ref: "products"
+                        },
+                        qty: {
+                            type: Number,
+                            default: 1
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

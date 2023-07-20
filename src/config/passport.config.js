@@ -1,15 +1,16 @@
 import passport from "passport";
 import local from 'passport-local'
-import userModel from "../dao/models/users.model.js";
-import cartManager from "../dao/management/cartManager.js";
+import CartManager from "../dao/cartManager.js";
 import { createHash, generateToken, extractCookie} from "../utils.js";
 import githubStrategy from 'passport-github2'
 import passport_jwt, { ExtractJwt } from 'passport-jwt'
 import env from './environment.config.js'
+import { userService } from "../services/index.js";
 
 const LocalStrategy= local.Strategy
 const JWTStrategy= passport_jwt.Strategy
-const cm= new cartManager()
+const cartManager= new CartManager()
+
 const initializePassport=()=>{
     //register
     passport.use('register', new LocalStrategy({
@@ -18,23 +19,25 @@ const initializePassport=()=>{
     }, async(req, username, password, done)=>{
         const {first_name, last_name, age, email}= req.body
         try {
-            const user= await userModel.findOne({ email: username})
+            const user= await userService.getByEmail(username)
             if(user){
                 console.log('User already exists')
                 return done(null, false)
             }
-            const cart= await cm.createCart()
-            const newUser={
-                first_name, last_name, age, email,
-                password: createHash(password),
-            }
+            const cart= await cartManager.createCart()
             if(email== 'adminCoder@coder.com'){
-                newUser.rol= 'admin'  
+                const rol= 'admin'  
             }else{
-                newUser.rol='user'
+                const rol='user'
             } 
-            newUser.cart= cart._id
-            const result = await userModel.create(newUser)
+            const cartAsignated= cart._id
+            const newUser={
+                fullName: `${first_name} ${last_name}`, age, email,
+                password: createHash(password),
+                rol: rol,
+                cart:cartAsignated
+            }
+            const result = await userService.create(newUser)
             return done(null, result)
         } catch (error) {
             return done("error in register by passport" + error)
@@ -45,7 +48,7 @@ const initializePassport=()=>{
         usernameField: 'email'
     }, async(username, password, done)=>{
         try {
-            const user= await userModel.findOne({email: username})
+            const user= await userService.getByEmail(username)
             if(!user){
                 console.log('User doesnt exist')
                 return done(null, user)
@@ -64,9 +67,9 @@ const initializePassport=()=>{
         callbackURL: env.callbackURL
     }, async(accessToken, refreshToken, profile, done)=>{
         try {
-            const user= await userModel.findOne({email: profile._json.email})
+            const user= await userService.getByEmail(profile._json.email)
             if(user)return done(null, user)
-            const newUser= await userModel.create({
+            const newUser= await userService.create({
                 first_name: profile._json.name,
                 email: profile._json.email
             })
@@ -88,7 +91,7 @@ const initializePassport=()=>{
         done(null, user._id)
     })
     passport.deserializeUser(async(id, done)=>{
-        const user= await userModel.findById(id)
+        const user= await userService.getById(id)
         done(null, user)
     })
 

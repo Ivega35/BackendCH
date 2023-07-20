@@ -1,21 +1,16 @@
-import productsModel from "../models/products.model.js";
+import { productService } from '../services/index.js'
 
 class ProductManager {
 
     getProductsPaginated = async (limit, page, category, sort) => {
         try {
-
+            
             if (category) {
                 if (sort) {
-                    const result = await productsModel.paginate({ category: category }, {
-                        limit: limit,
-                        page: page,
-                        lean: true,
-                        sort: { price: sort }//asc or desc
-                    })
+                    const result = await productService.get(category, limit, page, sort)
                     return (result);
                 } else {
-                    const result = await productsModel.paginate({ category: category }, {
+                    result.paginate({ category: category }, {
                         limit: limit,
                         page: page,
                         lean: true
@@ -24,7 +19,7 @@ class ProductManager {
                 }
             } else {
                 if (sort) {
-                    const result = await productsModel.paginate({}, {
+                    result.paginate({}, {
                         limit: limit,
                         page: parseInt(page),
                         lean: true,
@@ -32,7 +27,7 @@ class ProductManager {
                     })
                     return (result);
                 } else {
-                    const result = await productsModel.paginate({}, {
+                    result.paginate({}, {
                         limit: limit,
                         page: parseInt(page),
                         lean: true
@@ -44,10 +39,6 @@ class ProductManager {
             console.log(error)
         }
     }
-    getProductsList = async () => {
-        const ProductsList = await productsModel.find({}).lean().exec()
-        return (ProductsList)
-    }
     generateCode = () => {
         const charsAvaible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let string = "";
@@ -55,11 +46,6 @@ class ProductManager {
             string += charsAvaible.charAt(Math.floor(Math.random() * charsAvaible.length));
         }
         return string
-    }
-    generateId = async () => {
-        let list = await this.getProductsList()
-        if (list.length === 0) return 1
-        return list[list.length - 1].pid + 1
     }
     validateCode = async () => {
         const list = await this.getProductsList()
@@ -73,11 +59,9 @@ class ProductManager {
     }
     addProducts = async ({ title, description, price, category, thumbnail, stock }) => {
         try {
-            const pid = await this.generateId()
             const code = await this.validateCode()
-            const newProduct = { pid, title, description, price, status: true, category, thumbnail, code, stock }
-            const productGenerated = new productsModel(newProduct)
-            await productGenerated.save()
+            const newProduct = { title, description, price, status: true, category, thumbnail, code, stock }
+            const productGenerated = await productService.save(newProduct)
             console.log(`Product ${title} created`)
         } catch (error) {
             console.log(error)
@@ -85,18 +69,18 @@ class ProductManager {
     }
     getProductsById = async (pid) => {
         try {
-            const product = await productsModel.findOne({ _id: pid }).lean().exec()
+            const product = await productService.getById(pid)
             return (product)
         } catch (error) {
             console.log(error)
         }
     }
     updateProduct = async (pid, data) => {
-        await productsModel.updateOne({ pid: pid }, { ...data })
+        await productService.update(cid, { ...data })
     }
     deleteProduct = async (pid) => {
         try {
-            await productsModel.deleteOne({ pid: pid })
+            await productService.delete(pid)
             console.log(`product ${pid} deleted`)
         } catch (err) {
             console.log(err)

@@ -1,21 +1,21 @@
-import mongoose from "mongoose";
+export default class UserModel{
 
-const userCollection= "users"
+    static get model(){
+        return 'users'
+    }
 
-const userSchema = new mongoose.Schema({
-    first_name: String,
-    last_name: String,
-    email: String,
-    age: Number,
-    rol: {
-            type: String,
-            enum:['user','admin']
-        },
-    password: String,
-    cart: String
-})
-
-mongoose.set('strictQuery', false)
-const userModel= mongoose.model(userCollection, userSchema)
-
-export default userModel
+    static get schema(){
+        return {
+            first_name: String,
+            last_name: String,
+            email: String,
+            age: Number,
+            rol: {
+                    type: String,
+                    enum:['user','admin']
+                },
+            password: String,
+            cart: String
+        }
+    }
+}
