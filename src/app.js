@@ -12,6 +12,7 @@ import passport from 'passport'
 import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
 import { passportCall } from './utils.js'
+import errorHandler from './middlewares/error.js'
 
 mongoose.set("strictQuery", false)
 
@@ -22,6 +23,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 //app.use(express.static('./src/public'))
 app.use(cookieParser())
+app.use(errorHandler)
 
 //handlebars setup
 app.engine('handlebars', handlebars.engine())

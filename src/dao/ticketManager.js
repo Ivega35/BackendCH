@@ -3,7 +3,7 @@ import { cartService } from "../services/index.js";
 import nodemailer from 'nodemailer'
 import environmentConfig from "../config/environment.config.js";
 
-export class TicketManager{
+export default class TicketManager{
 
     generateTicket = async (cid, purchaser) => {
         const code = await this.validateCode()
@@ -23,7 +23,7 @@ export class TicketManager{
         }
         await ticketService.save(ticket)
         await this.sendTickets(purchaser)
-        console.log('ticket created')
+        console.log("ticket generated")
     }
     generateCode = () => {
         const charsAvaible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

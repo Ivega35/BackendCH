@@ -1,8 +1,6 @@
 import CartManager from '../dao/cartManager.js'
-import { TicketManager } from '../dao/ticketManager.js'
 import handlebars from 'express-handlebars'
 
-const ticketManager= new TicketManager()
 const cartManager = new CartManager()
 const hbs = handlebars.create({})
 
@@ -54,13 +52,8 @@ const deleteOneCart = async (req, res) => {
 const purchase = async(req, res)=>{
     const cid= req.params.cid
     const purchaser= req.user.user.email
-    
-    const result= await cartManager.purchase(cid)
-    if(result == true) { 
-        await ticketManager.generateTicket(cid, purchaser)
-    }else {
-        res.send("No one product is avaivable. Check stock.")
-    }
+    await cartManager.purchase(cid, purchaser)
+    res.status(202)
 }
 
 export default { deleteOneCart, deleteOneProductFromACart, updateCart, updateProductQty, addProductToCart, getProductsFromACart, createCart, purchase }

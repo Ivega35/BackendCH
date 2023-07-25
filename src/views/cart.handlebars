@@ -41,10 +41,10 @@
                         </div>
             </div>
             {{/each}}
-            <div>
-                <a class="btn btn-success" onclick="finishPurchase('{{user.cart}}')">Finalizar compra</a>
-            </div> 
         </div>
+            <div class="d-flex justify-content-around pt-3">
+                <a class="btn btn-success " onclick="finishPurchase('{{user.cart}}')">Finalizar compra</a>
+            </div> 
     </div>
 
     {{else}}

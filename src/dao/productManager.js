@@ -29,9 +29,8 @@ class ProductManager {
             const code = await this.validateCode()
             const newProduct = { title, description, price, status: true, category, thumbnail, code, stock }
             await productService.save(newProduct)
-            console.log(`Product ${title} created`)
-        } catch (error) {
-            console.log(error)
+        } catch (err) {
+            console.log(err)
         }
     }
     getProductsById = async (pid) => {

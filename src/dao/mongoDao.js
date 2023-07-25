@@ -4,6 +4,10 @@ import CartModel from "./models/carts.model.js";
 import UserModel from "./models/users.model.js";
 import TicketModel from "./models/ticketModel.js";
 import mongoosePaginate from 'mongoose-paginate-v2'
+import CustomError from '../services/errors/custom_error.js'
+import EErros from '../services/errors/enums.js'
+import { notFoundModelErrorInfo  } from '../services/errors/info.js'
+
 
 export default class mongoDao {
     constructor(url) {
@@ -26,14 +30,26 @@ export default class mongoDao {
     }
 
     get = async (options, entity) => {
-        if (!this.models[entity]) throw new Error('entity not found in models')
+        if (!this.models[entity]) {
+            CustomError.createError({
+            name: "entity not found",
+            cause: notFoundModelErrorInfo(entity),
+            message: "Error finding entity",
+            code: EErros.NOT_FOUND_ERROR
+        })}
         let results = await this.models[entity].find(options) 
         return results
     }
     
     paginate = async ( limit, page, category, sort, entity) => {
         try {
-            if (!this.models[entity]) throw new Error('entity not found in models')
+            if (!this.models[entity]) {
+                CustomError.createError({
+                name: "entity not found",
+                cause: notFoundModelErrorInfo(entity),
+                message: "Error finding entity",
+                code: EErros.NOT_FOUND_ERROR
+            })}
             if(category){
                 if(sort){
                     const productos = await this.models[entity].paginate({category: category}, {
@@ -76,22 +92,46 @@ export default class mongoDao {
         }
     }
     getById = async (id, entity) => {
-        if (!this.models[entity]) throw new Error('entity not found in models')
+        if (!this.models[entity]) {
+            CustomError.createError({
+            name: "entity not found",
+            cause: notFoundModelErrorInfo(entity),
+            message: "Error finding entity",
+            code: EErros.NOT_FOUND_ERROR
+        })}
         let results = await this.models[entity].findOne({ _id: id }).lean().exec()
         return results
     }
     getByIdPopulate = async(id, populate, entity)=>{
-        if (!this.models[entity]) throw new Error('entity not found in models')
+        if (!this.models[entity]) {
+            CustomError.createError({
+            name: "entity not found",
+            cause: notFoundModelErrorInfo(entity),
+            message: "Error finding entity",
+            code: EErros.NOT_FOUND_ERROR
+        })}
         let results = await this.models[entity].findOne({ _id: id }).populate(populate).lean().exec()
         return results
     }
     getByEmail = async (email, entity) => {
-        if (!this.models[entity]) throw new Error('entity not found in models')
+        if (!this.models[entity]) {
+            CustomError.createError({
+            name: "entity not found",
+            cause: notFoundModelErrorInfo(entity),
+            message: "Error finding entity",
+            code: EErros.NOT_FOUND_ERROR
+        })}
         let results = await this.models[entity].findOne({ email: email }).lean().exec()
         return results
     }
     insert = async (document, entity) => {
-        if (!this.models[entity]) throw new Error('entity not found in models')
+        if (!this.models[entity]) {
+            CustomError.createError({
+            name: "entity not found",
+            cause: notFoundModelErrorInfo(entity),
+            message: "Error finding entity",
+            code: EErros.NOT_FOUND_ERROR
+        })}
         try {
             let instance = new this.models[entity](document)
             let results = await instance.save()
@@ -102,7 +142,13 @@ export default class mongoDao {
         }
     }
     update = async (data, id, entity ) => {
-        if (!this.models[entity]) throw new Error('entity not found in models')
+        if (!this.models[entity]) {
+            CustomError.createError({
+            name: "entity not found",
+            cause: notFoundModelErrorInfo(entity),
+            message: "Error finding entity",
+            code: EErros.NOT_FOUND_ERROR
+        })}
         try {
             let results = await this.models[entity].updateOne({ _id: id }, { ...data })
             return results
@@ -112,7 +158,13 @@ export default class mongoDao {
         }
     }
     delete = async (id, entity) => {
-        if (!this.models[entity]) throw new Error('entity not found in models')
+        if (!this.models[entity]) {
+            CustomError.createError({
+            name: "entity not found",
+            cause: notFoundModelErrorInfo(entity),
+            message: "Error finding entity",
+            code: EErros.NOT_FOUND_ERROR
+        })}
         try {
             let results = await this.models[entity].deleteOne({ _id: id })
             return results
@@ -122,7 +174,13 @@ export default class mongoDao {
         }
     }
     create = async (document, entity) => {
-        if (!this.models[entity]) throw new Error('entity not found in models')
+        if (!this.models[entity]) {
+            CustomError.createError({
+            name: "entity not found",
+            cause: notFoundModelErrorInfo(entity),
+            message: "Error finding entity",
+            code: EErros.NOT_FOUND_ERROR
+        })}
         try {
             const result = await this.models[entity].create(document)
             return result

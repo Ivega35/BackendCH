@@ -1,4 +1,7 @@
 import ProductManager from "../dao/productManager.js";
+import CustomError from '../services/errors/custom_error.js'
+import EErros from '../services/errors/enums.js'
+import { addProductErrorInfo } from '../services/errors/info.js'
 
 const productManager = new ProductManager()
 
@@ -17,7 +20,12 @@ const addProducts = async (req, res) => {
         !data.category ||
         !data.stock
     ) {
-        res.status(206).send("incomplete fields")
+        CustomError.createError({
+            name: "product creation error",
+            cause: addProductErrorInfo(data),
+            message: "Error trying to create a product",
+            code: EErros.INVALID_TYPES_ERROR
+        })
     } else {
         await productManager.addProducts(data)
         res.status(201).send("Product created")
