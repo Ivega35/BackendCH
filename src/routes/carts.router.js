@@ -1,11 +1,12 @@
 import { Router } from "express";
 import cartController from "../controllers/cart.controller.js";
+import { isAdmin } from "../utils.js";
 
 const router = Router()
 
 //POST /api/carts --> create cart by thc
 router.post('/', cartController.createCart)
-//GET /api/carts/:cid ---> Show the products which are in cid cart
+//GET api/carts/:cid ---> Show the products which are in cid cart
 router.get('/:cid', cartController.getProductsFromACart)
 //POST /api/carts/:cid/products/:pid --> To add a product(pid) to a specific cart(cid)
 router.post('/:cid/products/:pid', cartController.addProductToCart)

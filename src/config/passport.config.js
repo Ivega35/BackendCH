@@ -6,7 +6,7 @@ import githubStrategy from 'passport-github2'
 import passport_jwt, { ExtractJwt } from 'passport-jwt'
 import env from './environment.config.js'
 import { userService } from "../services/index.js";
-import userDto from "../dto/userDto.js";
+//import userDto from "../dto/userDto.js";
 
 const LocalStrategy = local.Strategy
 const JWTStrategy = passport_jwt.Strategy

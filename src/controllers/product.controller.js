@@ -42,7 +42,7 @@ const getProductsPaginated = async (req, res) => {
     let sort = req.query.sort
     const category = req.query.category
     if (!page) page = 1
-    if (!limit) limit = 10
+    if (!limit) limit = 9
     if (sort !== 'asc' && sort !== 'desc') sort = false
 
     const result = await productManager.getProductsPaginated(limit, page, category, sort)

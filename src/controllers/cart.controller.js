@@ -1,10 +1,6 @@
 import CartManager from '../dao/cartManager.js'
 import { TicketManager } from '../dao/ticketManager.js'
 import handlebars from 'express-handlebars'
-import { decode } from '../utils.js'
-import env from '../config/environment.config.js'
-import { userService } from '../services/index.js'
-import UserDTO from '../dto/userDto.js'
 
 const ticketManager= new TicketManager()
 const cartManager = new CartManager()
@@ -16,12 +12,7 @@ const createCart = async (req, res) => {
 }
 const getProductsFromACart = async (req, res) => {
     const cid = req.params.cid
-    const token = req.cookies[env.jwt_cookie_name]
-    const decoded = decode(token)
-    const user= decoded.user
-    // const result= await userService.get()
-    // const usersDTO= result.map(user => new UserDTO(user))
-    // const user= usersDTO.find(user => user.cart == cid)
+    const user= req.user.user
     hbs.handlebars.registerHelper('subtotal', function () {
         return this.qty * this.pid.price
     })
@@ -62,9 +53,7 @@ const deleteOneCart = async (req, res) => {
 }
 const purchase = async(req, res)=>{
     const cid= req.params.cid
-    const token = req.cookies[env.jwt_cookie_name]
-    const decoded = decode(token)
-    const purchaser = decoded.user.email
+    const purchaser= req.user.user.email
     
     const result= await cartManager.purchase(cid)
     if(result == true) { 

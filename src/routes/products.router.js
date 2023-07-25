@@ -1,12 +1,13 @@
 import { Router } from "express";
 import productController from "../controllers/product.controller.js";
+import { isAdmin } from "../utils.js";
 const router = Router()
 
 //POST /api/products --> To create any product by body(ThunderClient)
-router.post('/', productController.addProducts)
+router.post('/', isAdmin, productController.addProducts)
 //PUT /api/products/:pid --> To update any product by body(ThunderClient)
-router.put('/:pid', productController.updateProduct)
+router.put('/:pid', isAdmin, productController.updateProduct)
 //DELETE /api/products/:pid --> To delete any product by id (thunderclient)
-router.delete('/:pid', productController.deleteProduct)
+router.delete('/:pid',isAdmin, productController.deleteProduct)
 
 export default router

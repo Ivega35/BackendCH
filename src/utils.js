@@ -39,3 +39,18 @@ export const decode = (token)=>{
     const decoded = jwt.decode(token, env.jwt_private_key);
     return decoded
 }
+
+export const isAdmin = (req, res, next) => {
+    const user = req.user
+    console.log(user)
+    let isAdminUser = false;
+  
+    if (user.rol == "admin") {
+      isAdminUser = true;
+      next();
+    } else {
+      res.status(403).render("errors/base", {
+        message: "No auth",
+      });
+    }
+  };
