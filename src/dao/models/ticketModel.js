@@ -1,3 +1,5 @@
+import mongoose from "mongoose"
+
 export default class TicketModel{
     static get model(){
         return 'tickets'

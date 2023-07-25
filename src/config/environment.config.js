@@ -13,5 +13,8 @@ export default{
     callbackURL: process.env.CALLBACK_URL,
     //JWT
     jwt_private_key: process.env.JWT_PRIVATE_KEY,
-    jwt_cookie_name: process.env.JWT_COOKIE_NAME
+    jwt_cookie_name: process.env.JWT_COOKIE_NAME,
+    //GMAIL
+    gmail_user: process.env.GMAIL_USER,
+    gmail_pass: process.env.GMAIL_PASS
 }

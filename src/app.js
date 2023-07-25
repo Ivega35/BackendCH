@@ -13,6 +13,7 @@ import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
 import { passportCall } from './utils.js'
 
+
 mongoose.set("strictQuery", false)
 
 const app= express()
@@ -39,6 +40,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 //Routers
+
 app.use('/api/products', productsRouter)
 app.use('/api/carts', CartsRouter)
 

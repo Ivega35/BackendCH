@@ -22,10 +22,10 @@ export const generateToken= (user)=>{
     const token= jwt.sign({user}, env.jwt_private_key, {expiresIn: '24h'} )
     return token
 }
-export const extractCookie= req=>{
+export const extractCookie= (req)=>{
     return (req && req.cookies) ? req.cookies[env.jwt_cookie_name] : null
 }
-export const passportCall= strategy=>{
+export const passportCall= (strategy)=>{
     return async(req, res, next)=>{
         passport.authenticate(strategy, function(err, user, info){
             if(err)return next(err)
@@ -34,4 +34,8 @@ export const passportCall= strategy=>{
             next()
         })(req, res, next)
     }
+}
+export const decode = (token)=>{
+    const decoded = jwt.decode(token, env.jwt_private_key);
+    return decoded
 }

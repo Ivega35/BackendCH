@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 export default class UserModel{
 
     static get model(){
@@ -15,7 +16,10 @@ export default class UserModel{
                     enum:['user','admin']
                 },
             password: String,
-            cart: String
+            cart: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "carts"
+            }
         }
     }
 }
