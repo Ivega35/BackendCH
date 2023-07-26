@@ -2,6 +2,7 @@ import ProductManager from "../dao/productManager.js";
 import CustomError from '../services/errors/custom_error.js'
 import EErros from '../services/errors/enums.js'
 import { addProductErrorInfo } from '../services/errors/info.js'
+import { generateProductsMock, generateUserMock } from "../mocking/mock.js";
 
 const productManager = new ProductManager()
 
@@ -62,7 +63,21 @@ const getProductsPaginated = async (req, res) => {
         result.nextLink = result.hasNextPage ? `/products/?limit=${limit}&page=${result.nextPage}` : ''
     }
     const user = req.user.user
+    console.log(result)
     res.render('home', { result, user })
 }
+const mockingProducts= async(req, res) =>{
+    const docs= []
+    const qtyOfMocks= 100
 
-export default { getProductById, addProducts, updateProduct, deleteProduct, getProductsPaginated }
+    for (let index = 0; index < qtyOfMocks  ; index++) {
+        docs.push(generateProductsMock())
+    }
+    const user= generateUserMock()
+    const result={
+        docs: docs
+        }
+    res.render('home', {result, user})
+}
+
+export default { getProductById, addProducts, updateProduct, deleteProduct, getProductsPaginated, mockingProducts }

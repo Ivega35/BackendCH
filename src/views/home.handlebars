@@ -20,10 +20,11 @@
             <div class="col-4 my-1">
                 <div class="card" style="height: 400px; width:340px;">
                     <a href="/products/{{this._id}}" style="text-decoration: none;">
-                        <img src={{this.thumbnail}} class="card-img-top" alt={{this.title}} style="height: 280px;">
+                        <img src={{this.thumbnail}} class="card-img-top" alt={{this.title}} style="height: 250px;">
                         <div class="card-body mx-3">
                             <p class="card-text fs-6 fw-bold text-dark">{{this.title}}</p>
-                            <p class="card-text fw-semibold fs-6 text-dark">price: ${{this.price}}</p>
+                            <p class="fw-semibold fs-6 text-dark">price: ${{this.price}}</p>
+                            <p class="fw-semibold fs-6 text-dark">Stock: {{this.stock}}</p>
                         </div>
                     </a>
                 </div>

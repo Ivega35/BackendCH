@@ -6,6 +6,7 @@ class ProductManager {
         const result = await productService.paginate(limit, page, category, sort)
         return result
     }
+    
     generateCode = () => {
         const charsAvaible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let string = "";

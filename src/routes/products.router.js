@@ -9,5 +9,6 @@ router.post('/', isAdmin, productController.addProducts)
 router.put('/:pid', isAdmin, productController.updateProduct)
 //DELETE /api/products/:pid --> To delete any product by id (thunderclient)
 router.delete('/:pid',isAdmin, productController.deleteProduct)
-
+//GET /api/products/mockingproducts
+router.get('/mockingproducts', productController.mockingProducts)
 export default router
