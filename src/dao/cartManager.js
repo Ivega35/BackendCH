@@ -33,33 +33,33 @@ class CartManager {
         }
     }
     addProductToCart = async (cid, pid) => {
-        const cartSelected = await cartService.getById(cid)
-        const repeat = cartSelected.products.find(x => x.pid == pid)
-        if (repeat != undefined) {
-            repeat.qty++
-        } else {
-            cartSelected.products.push({
-                pid: pid,
-                qty: 1
-            })
-        }
-        const result = await cartService.update(cartSelected, cid)
-        return result
-
+       
+            const cartSelected = await cartService.getById(cid)
+            const repeat = cartSelected.products.find(x => x.pid == pid)
+            if (repeat != undefined) {
+                repeat.qty++
+            } else {
+                cartSelected.products.push({
+                    pid: pid,
+                    qty: 1
+                })
+            }
+            await cartService.update(cartSelected, cid)
+        
     }
     deleteOneCart = async (cid) => {
         await cartService.delete(cid)
     }
     deleteAllproductsFromACart= async(cid)=>{
-        const populate = 'products.pid'
-        const cart = await cartService.getByIdPopulate(cid, populate)
-        const products= cart.products
-        
-        for (let index = 0; index < products.length; index++) {
-            const product = products[index];
-            const pid= product.pid._id
-            await this.deleteOneProductFromACart(cid, pid)
-        }
+            const populate = 'products.pid'
+            const cart = await cartService.getByIdPopulate(cid, populate)
+            const products= cart.products
+            
+            for (let index = 0; index < products.length; index++) {
+                const product = products[index];
+                const pid= product.pid._id
+                await this.deleteOneProductFromACart(cid, pid)
+            }
     }
     deleteOneProductFromACart = async (cid, pid) => {
         const cartSelected = await cartService.getById(cid)
@@ -106,15 +106,7 @@ class CartManager {
                 await productService.update(newStock, pid)
             }
         }
-        // for (let index = 0; index < unavailables.length; index++) {
-        //     const productId = unavailables[index];
-        //     const product = await productService.getById(productId)
-        //     productsLeft.push({
-        //         pid: product._id.toString(),
-        //         qty: 1
-        //     })
-        // }
-        console.log(unavailables)
+
         if(unavailables.length == 0){
             await ticketManager.generateTicket(cid, email)
             await this.deleteAllproductsFromACart(cid)
@@ -127,6 +119,7 @@ class CartManager {
             }
         }
     }
+
 }
 
 export default CartManager

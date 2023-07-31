@@ -2,15 +2,16 @@ import { ticketService } from "../services/index.js";
 import { cartService } from "../services/index.js";
 import nodemailer from 'nodemailer'
 import environmentConfig from "../config/environment.config.js";
+import createLogger from '../logs/logger.js'
 
-export default class TicketManager{
+export default class TicketManager {
 
     generateTicket = async (cid, purchaser) => {
         const code = await this.validateCode()
         const populate = 'products.pid'
         const cart = await cartService.getByIdPopulate(cid, populate)
         const products = cart.products
-        let amount= 0
+        let amount = 0
         products.forEach(product => {
             const price = product.pid.price
             const qty = product.qty
@@ -23,7 +24,6 @@ export default class TicketManager{
         }
         await ticketService.save(ticket)
         await this.sendTickets(purchaser)
-        console.log("ticket generated")
     }
     generateCode = () => {
         const charsAvaible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

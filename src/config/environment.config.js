@@ -16,5 +16,7 @@ export default{
     jwt_cookie_name: process.env.JWT_COOKIE_NAME,
     //GMAIL
     gmail_user: process.env.GMAIL_USER,
-    gmail_pass: process.env.GMAIL_PASS
+    gmail_pass: process.env.GMAIL_PASS,
+    //Environment
+    environment: process.env.ENVIRONMENT
 }

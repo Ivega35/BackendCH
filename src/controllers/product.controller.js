@@ -3,6 +3,7 @@ import CustomError from '../services/errors/custom_error.js'
 import EErros from '../services/errors/enums.js'
 import { addProductErrorInfo } from '../services/errors/info.js'
 import { generateProductsMock, generateUserMock } from "../mocking/mock.js";
+import createLogger  from "../logs/logger.js";
 
 const productManager = new ProductManager()
 
@@ -29,7 +30,8 @@ const addProducts = async (req, res) => {
         })
     } else {
         await productManager.addProducts(data)
-        res.status(201).send("Product created")
+        createLogger.info('New product created')
+        res.status(201)
     }
 }
 
@@ -41,8 +43,13 @@ const updateProduct = async (req, res) => {
 }
 const deleteProduct = async (req, res) => {
     const pid = req.params.pid
-    await productManager.deleteProduct(pid)
-    res.send("Product deleted")
+    try {
+        await productManager.deleteProduct(pid)
+        res.status(201)
+        createLogger.warning(`Product ${pid} has been deleted`)
+    } catch (error) {
+        createLogger.error(error)
+    }
 }
 const getProductsPaginated = async (req, res) => {
     //params
