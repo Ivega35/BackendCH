@@ -70,7 +70,6 @@ const getProductsPaginated = async (req, res) => {
         result.nextLink = result.hasNextPage ? `/products/?limit=${limit}&page=${result.nextPage}` : ''
     }
     const user = req.user.user
-    console.log(result)
     res.render('home', { result, user })
 }
 const mockingProducts= async(req, res) =>{
