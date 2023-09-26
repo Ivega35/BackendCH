@@ -7,6 +7,7 @@ import productsRouter from './routes/products.router.js'
 import CartsRouter from './routes/carts.router.js'
 import viewsRouter from './routes/view.router.js'
 import sessionsRouter from './routes/sessions.router.js'
+import homeRouter from './routes/home.router.js'
 import passport from 'passport'
 import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
@@ -57,7 +58,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 //Routers
-
+app.use('/', homeRouter)
 app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 app.use('/api/products',passportCall('jwt'), productsRouter)
 app.use('/api/carts', passportCall('jwt'), CartsRouter)
