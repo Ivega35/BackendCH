@@ -14,7 +14,7 @@ import { passportCall } from './utils.js'
 import errorHandler from './middlewares/error.js'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUiExpress from 'swagger-ui-express'
-
+import usersRouter from './routes/users.router.js'
 mongoose.set("strictQuery", false)
 
 const app= express()
@@ -59,10 +59,11 @@ app.use(passport.session())
 //Routers
 
 app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
-app.use('/api/products', productsRouter)
+app.use('/api/products',passportCall('jwt'), productsRouter)
 app.use('/api/carts', passportCall('jwt'), CartsRouter)
 app.use('/products', passportCall('jwt'), viewsRouter)
 app.use('/session', sessionsRouter)
+app.use('/api/users',passportCall('jwt'), usersRouter)
 //Mongoose and server
 try {
     await mongoose.connect(env.mongo_uri)

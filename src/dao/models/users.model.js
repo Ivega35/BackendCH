@@ -13,13 +13,15 @@ export default class UserModel{
             age: Number,
             rol: {
                     type: String,
-                    enum:['user','admin']
+                    enum:['user','admin', 'premium']
                 },
             password: String,
             cart: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "carts"
-            }
+            },
+            last_connection: Date
+            
         }
     }
 }

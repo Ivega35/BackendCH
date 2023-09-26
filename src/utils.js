@@ -4,9 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
 import env from './config/environment.config.js'
-import CustomError from './services/errors/custom_error.js'
-import EErros from './services/errors/enums.js'
-import { unauthorizedErrorInfo } from './services/errors/info.js'
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -40,21 +38,3 @@ export const passportCall = (strategy) => {
         })(req, res, next)
     }
 }
-//middlewares
-export const isAdmin = (req, res, next) => {
-    const user = req.user
-    console.log(user)
-    let isAdminUser = false;
-
-    if (user.rol == "admin") {
-        isAdminUser = true;
-        next();
-    } else {
-        CustomError.createError({
-            name: "Not auth",
-            cause: unauthorizedErrorInfo,
-            message: "Error trying to get access",
-            code: EErros.UNAUTHORIZED_ERROR
-        });
-    }
-};

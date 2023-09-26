@@ -1,0 +1,22 @@
+<table class="table table-striped table-dark my-5">
+  <thead>
+    <tr>
+      
+      <th scope="col" class="text-center">Full name</th>
+      <th scope="col" class="text-center">E-mail</th>
+      <th scope="col" class="text-center">Rol</th>
+      <th scope="col" class="text-center">Settings</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each hbsUsers}}
+    <tr>
+     
+      <td class="text-center">{{this.fullname}}</td>
+      <td class="text-center">{{this.email}}</td>
+      <td class="text-center">{{this.rol}}</td>
+      <td class="text-center"><a class="btn btn-warning" href="/api/users/update/{{this._id}}">update user</a></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

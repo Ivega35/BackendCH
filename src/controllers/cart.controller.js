@@ -78,14 +78,16 @@ const deleteOneCart = async (req, res) => {
 const purchase = async (req, res) => {
     const cid = req.params.cid
     const purchaser = req.user.user.email
-    try {
-        await cartManager.purchase(cid, purchaser)
+    const result= await cartManager.purchase(cid, purchaser)
+    if(result === true){
         res.status(202)
         createLogger.info(`Purchase completed: ${purchaser} -- ${cid}`)
-    } catch (error){
-        res.status(400)
-        createLogger.error(`Purchase failed: ${purchaser} -- ${cid}, error: ${error}`)
+        res.render('finishedPurchase', {})
+    }else{
+        createLogger.error(`Purchase failed: ${purchaser} -- ${cid}, error: there isnt available products in the cart`)
+        const error= 'There isnt available products in the cart'
+        res.render('errors/base', {error})
     }
+    
 }
-
-export default { deleteOneCart, deleteOneProductFromACart, updateCart, updateProductQty, addProductToCart, getProductsFromACart, createCart, purchase }
+export default {deleteOneCart, deleteOneProductFromACart, updateCart, updateProductQty, addProductToCart, getProductsFromACart, createCart, purchase }

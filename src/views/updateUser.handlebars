@@ -1,0 +1,16 @@
+<div class="container-fluid mx-auto p-2 ">
+    <p class="text-center my-4 fs-2 fw-semibold">Update user:{{result.email}}</p>
+    <div class="card col-lg-4 mx-auto p-2 bg-body-tertiary">
+        <div class="card-body ">
+            <form action="/api/users/update/{{result._id}}" method="POST">
+                <h3>Rol:{{result.rol}}</h3>
+                    <select name="rol">
+                        <option value="{{result.rol}}">Select...</option>
+                        <option value="user">User</option>
+                        <option value="premium">Premium</option>
+                    </select>
+                    <a class="btn btn-primary" href="/api/users" type="submit">Change Rol</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,8 @@
+import { error } from 'console'
 import { cartService, productService } from '../services/index.js'
-import TicketManager  from './ticketManager.js'
+import TicketManager from './ticketManager.js'
 
-const ticketManager= new TicketManager()
+const ticketManager = new TicketManager()
 
 class CartManager {
 
@@ -33,33 +34,33 @@ class CartManager {
         }
     }
     addProductToCart = async (cid, pid) => {
-       
-            const cartSelected = await cartService.getById(cid)
-            const repeat = cartSelected.products.find(x => x.pid == pid)
-            if (repeat != undefined) {
-                repeat.qty++
-            } else {
-                cartSelected.products.push({
-                    pid: pid,
-                    qty: 1
-                })
-            }
-            await cartService.update(cartSelected, cid)
-        
+
+        const cartSelected = await cartService.getById(cid)
+        const repeat = cartSelected.products.find(x => x.pid == pid)
+        if (repeat != undefined) {
+            repeat.qty++
+        } else {
+            cartSelected.products.push({
+                pid: pid,
+                qty: 1
+            })
+        }
+        await cartService.update(cartSelected, cid)
+
     }
     deleteOneCart = async (cid) => {
         await cartService.delete(cid)
     }
-    deleteAllproductsFromACart= async(cid)=>{
-            const populate = 'products.pid'
-            const cart = await cartService.getByIdPopulate(cid, populate)
-            const products= cart.products
-            
-            for (let index = 0; index < products.length; index++) {
-                const product = products[index];
-                const pid= product.pid._id
-                await this.deleteOneProductFromACart(cid, pid)
-            }
+    deleteAllproductsFromACart = async (cid) => {
+        const populate = 'products.pid'
+        const cart = await cartService.getByIdPopulate(cid, populate)
+        const products = cart.products
+
+        for (let index = 0; index < products.length; index++) {
+            const product = products[index];
+            const pid = product.pid._id
+            await this.deleteOneProductFromACart(cid, pid)
+        }
     }
     deleteOneProductFromACart = async (cid, pid) => {
         const cartSelected = await cartService.getById(cid)
@@ -85,12 +86,15 @@ class CartManager {
         const result = await cartService.update(cartToUpdate, cid)
         return result
     }
+
     purchase = async (cid, email) => {
         const populate = 'products.pid'
         const cart = await cartService.getByIdPopulate(cid, populate)
         const products = cart.products
         const unavailables = []
-        const productsLeft = []
+        const availables = []
+        let success= false
+        
         for (let index = 0; index < products.length; index++) {
             const product = products[index]
             const pid = product.pid._id.toString()
@@ -104,20 +108,27 @@ class CartManager {
                     stock: stockAux
                 }
                 await productService.update(newStock, pid)
+                availables.push(pid)
             }
         }
 
-        if(unavailables.length == 0){
-            await ticketManager.generateTicket(cid, email)
-            await this.deleteAllproductsFromACart(cid)
-        }else{
-            await ticketManager.generateTicket(cid, email)
-            await this.deleteAllproductsFromACart(cid)
-            for (let index = 0; index < unavailables.length; index++) {
-                const pid = unavailables[index]
-                await this.addProductToCart(cid, pid)
+        if (availables.length > 0) {
+            if (unavailables.length == 0) {
+                await ticketManager.generateTicket(cid, email)
+                await this.deleteAllproductsFromACart(cid)
+                success= true
+            }else{
+                await ticketManager.generateTicket(cid, email)
+                await this.deleteAllproductsFromACart(cid)
+                for (let index = 0; index < unavailables.length; index++) {
+                    const pid = unavailables[index]
+                    await this.addProductToCart(cid, pid)
+                }
+                success= true
             }
         }
+        
+        return success
     }
 
 }

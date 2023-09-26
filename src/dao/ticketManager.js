@@ -59,6 +59,24 @@ export default class TicketManager {
             subject: 'Purchase finished',
             html: "your purchase has been successfully. Your product/s will arrive in 14 days. Thank you for your confidence."
         }
-        transporter.sendMail(message)
+        await transporter.sendMail(message)
+    }
+
+    deleteTicket= async(email)=>{
+        const config = {
+            service: 'gmail',
+            auth: {
+                user: environmentConfig.gmail_user,
+                pass: environmentConfig.gmail_pass
+            }
+        }
+        const transporter = nodemailer.createTransport(config)
+        const message = {
+            from: environmentConfig.gmail_user,
+            to: email,
+            subject: 'Purchase finished',
+            html: "Your account has been deleted for inactivity. You can register again if you wish."
+        }
+        await transporter.sendMail(message)
     }
 }

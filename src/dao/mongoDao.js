@@ -6,7 +6,7 @@ import TicketModel from "./models/ticketModel.js";
 import mongoosePaginate from 'mongoose-paginate-v2'
 import CustomError from '../services/errors/custom_error.js'
 import EErros from '../services/errors/enums.js'
-import { notFoundModelErrorInfo  } from '../services/errors/info.js'
+import { notFoundModelErrorInfo } from '../services/errors/info.js'
 
 
 export default class mongoDao {
@@ -32,45 +32,47 @@ export default class mongoDao {
     get = async (options, entity) => {
         if (!this.models[entity]) {
             CustomError.createError({
-            name: "entity not found",
-            cause: notFoundModelErrorInfo(entity),
-            message: "Error finding entity",
-            code: EErros.NOT_FOUND_ERROR
-        })}
-        let results = await this.models[entity].find(options) 
-        return results
-    }
-    
-    paginate = async ( limit, page, category, sort, entity) => {
-        try {
-            if (!this.models[entity]) {
-                CustomError.createError({
                 name: "entity not found",
                 cause: notFoundModelErrorInfo(entity),
                 message: "Error finding entity",
                 code: EErros.NOT_FOUND_ERROR
-            })}
-            if(category){
-                if(sort){
-                    const productos = await this.models[entity].paginate({category: category}, {
+            })
+        }
+        let results = await this.models[entity].find(options)
+        return results
+    }
+
+    paginate = async (limit, page, category, sort, entity) => {
+        try {
+            if (!this.models[entity]) {
+                CustomError.createError({
+                    name: "entity not found",
+                    cause: notFoundModelErrorInfo(entity),
+                    message: "Error finding entity",
+                    code: EErros.NOT_FOUND_ERROR
+                })
+            }
+            if (category) {
+                if (sort) {
+                    const productos = await this.models[entity].paginate({ category: category }, {
                         page,
                         limit,
                         lean: true,
-                        category:category,
+                        category: category,
                         sort: sort
                     });
                     return productos
-                }else{
-                    const productos = await this.models[entity].paginate({category: category}, {
+                } else {
+                    const productos = await this.models[entity].paginate({ category: category }, {
                         page,
                         limit,
                         lean: true,
-                        category:category
+                        category: category
                     });
                     return productos
                 }
-            }else{
-                if(sort){
+            } else {
+                if (sort) {
                     const productos = await this.models[entity].paginate(category, {
                         page,
                         limit,
@@ -78,7 +80,7 @@ export default class mongoDao {
                         sort: sort
                     });
                     return productos
-                }else{
+                } else {
                     const productos = await this.models[entity].paginate(category, {
                         page,
                         limit,
@@ -94,99 +96,88 @@ export default class mongoDao {
     getById = async (id, entity) => {
         if (!this.models[entity]) {
             CustomError.createError({
-            name: "entity not found",
-            cause: notFoundModelErrorInfo(entity),
-            message: "Error finding entity",
-            code: EErros.NOT_FOUND_ERROR
-        })}
+                name: "entity not found",
+                cause: notFoundModelErrorInfo(entity),
+                message: "Error finding entity",
+                code: EErros.NOT_FOUND_ERROR
+            })
+        }
         let results = await this.models[entity].findOne({ _id: id }).lean().exec()
         return results
     }
-    getByIdPopulate = async(id, populate, entity)=>{
+    getByIdPopulate = async (id, populate, entity) => {
         if (!this.models[entity]) {
             CustomError.createError({
-            name: "entity not found",
-            cause: notFoundModelErrorInfo(entity),
-            message: "Error finding entity",
-            code: EErros.NOT_FOUND_ERROR
-        })}
+                name: "entity not found",
+                cause: notFoundModelErrorInfo(entity),
+                message: "Error finding entity",
+                code: EErros.NOT_FOUND_ERROR
+            })
+        }
         let results = await this.models[entity].findOne({ _id: id }).populate(populate).lean().exec()
         return results
     }
     getByEmail = async (email, entity) => {
         if (!this.models[entity]) {
             CustomError.createError({
-            name: "entity not found",
-            cause: notFoundModelErrorInfo(entity),
-            message: "Error finding entity",
-            code: EErros.NOT_FOUND_ERROR
-        })}
+                name: "entity not found",
+                cause: notFoundModelErrorInfo(entity),
+                message: "Error finding entity",
+                code: EErros.NOT_FOUND_ERROR
+            })
+        }
         let results = await this.models[entity].findOne({ email: email }).lean().exec()
         return results
     }
     insert = async (document, entity) => {
         if (!this.models[entity]) {
             CustomError.createError({
-            name: "entity not found",
-            cause: notFoundModelErrorInfo(entity),
-            message: "Error finding entity",
-            code: EErros.NOT_FOUND_ERROR
-        })}
-        try {
-            let instance = new this.models[entity](document)
-            let results = await instance.save()
-            return results
-        } catch (err) {
-            console.log(err.message)
-            return null
+                name: "entity not found",
+                cause: notFoundModelErrorInfo(entity),
+                message: "Error finding entity",
+                code: EErros.NOT_FOUND_ERROR
+            })
         }
+        let instance = new this.models[entity](document)
+        let results = await instance.save()
+        return results
+
     }
-    update = async (data, id, entity ) => {
+    update = async (data, id, entity) => {
         if (!this.models[entity]) {
             CustomError.createError({
-            name: "entity not found",
-            cause: notFoundModelErrorInfo(entity),
-            message: "Error finding entity",
-            code: EErros.NOT_FOUND_ERROR
-        })}
-        try {
-            let results = await this.models[entity].updateOne({ _id: id }, { ...data })
-            return results
-        } catch (err) {
-            console.log(err.message)
-            return null
+                name: "entity not found",
+                cause: notFoundModelErrorInfo(entity),
+                message: "Error finding entity",
+                code: EErros.NOT_FOUND_ERROR
+            })
         }
+        let results = await this.models[entity].updateOne({ _id: id }, { ...data })
+        return results
     }
     delete = async (id, entity) => {
         if (!this.models[entity]) {
             CustomError.createError({
-            name: "entity not found",
-            cause: notFoundModelErrorInfo(entity),
-            message: "Error finding entity",
-            code: EErros.NOT_FOUND_ERROR
-        })}
-        try {
-            let results = await this.models[entity].deleteOne({ _id: id })
-            return results
-        } catch (err) {
-            console.log(err.message)
-            return null
+                name: "entity not found",
+                cause: notFoundModelErrorInfo(entity),
+                message: "Error finding entity",
+                code: EErros.NOT_FOUND_ERROR
+            })
         }
+        let results = await this.models[entity].deleteOne({ _id: id })
+        return results
+
     }
     create = async (document, entity) => {
         if (!this.models[entity]) {
             CustomError.createError({
-            name: "entity not found",
-            cause: notFoundModelErrorInfo(entity),
-            message: "Error finding entity",
-            code: EErros.NOT_FOUND_ERROR
-        })}
-        try {
-            const result = await this.models[entity].create(document)
-            return result
-        } catch (err) {
-            console.log(err.message)
-            return null
+                name: "entity not found",
+                cause: notFoundModelErrorInfo(entity),
+                message: "Error finding entity",
+                code: EErros.NOT_FOUND_ERROR
+            })
         }
+        const result = await this.models[entity].create(document)
+        return result
     }
 } 

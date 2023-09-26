@@ -2,7 +2,7 @@
     
     function deleteItem(cid, pid) {
         fetch(`http://localhost:8080/api/carts/${cid}/products/${pid}`, {
-            method: 'put'
+            method: 'delete'
         })
     }
     function finishPurchase(cid){
@@ -37,13 +37,13 @@
                 </div>
                         <div class="col-lg-4 d-flex justify-content-around align-items-center">
                             <p class="mt-3 text-white">subtotal: usd {{subtotal}} </p>
-                            <a class="btn btn-danger " onclick="deleteItem('{{../user.cart}}' , '{{this.pid._id}}')">Delete item</a>
+                            <a class="btn btn-danger " onclick="deleteItem('{{user.cart}}' , '{{this.pid._id}}')">Delete item</a>
                         </div>
             </div>
             {{/each}}
         </div>
             <div class="d-flex justify-content-around pt-3">
-                <a class="btn btn-success " onclick="finishPurchase('{{user.cart}}')">Finalizar compra</a>
+                <a class="btn btn-success " href="/api/carts/{{user.cart}}/purchase" onclick="finishPurchase('{{user.cart}}')">Finalizar compra</a>
             </div> 
     </div>
 

@@ -1,7 +1,10 @@
 import { Router } from "express";
 import passport from "passport";
 import env from '../config/environment.config.js'
+import UserManager from "../dao/userManager.js";
+
 const router = Router()
+const userManager= new UserManager()
 // GET /session/register --> Shows the register form
 router.get('/register', (req, res) => {
     res.render('sessions/register')
@@ -29,6 +32,8 @@ router.post('/login',
             return res.status(400).send({ status: 'error', error: 'invalid credentials' })
         }
         req.session.user = req.user
+        const email= req.user.email
+        await userManager.updateLastConnection(email)
         res.cookie(env.jwt_cookie_name, req.user.token).redirect('/products')
     })
 //GET /session/failLogin --> Shows an error in the login process
